@@ -6,9 +6,10 @@ import {
   deletePersonajeCtrl,
   updatePersonajeCtrl,
 } from "../controllers/personaje.ctrl";
+import { createPersonajeValidation } from "../validations/personaje.valid";
 const router = Router();
 
-router.post("/", createPersonajeCtrl);
+router.post("/", createPersonajeValidation, createPersonajeCtrl);
 
 router.get("/list", getListaPersonajeCtrl);
 
