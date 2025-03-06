@@ -3,7 +3,8 @@ const prisma = new PrismaClient();
 
 export const createPersonajeSrv = async ({
   foto,
-  nombre
+  nombre,
+  idUsuario
 }: Personaje) => {
   if (!nombre) {
     return { error: "Es requerido" }
@@ -11,7 +12,8 @@ export const createPersonajeSrv = async ({
   const response = await prisma.personaje.create({
     data: {
       nombre,
-      foto
+      foto,
+      idUsuario
     }
   });
 
