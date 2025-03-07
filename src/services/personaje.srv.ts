@@ -20,8 +20,16 @@ export const createPersonajeSrv = async ({
   return response;
 };
 
-export const getListaPersonajeSrv = async () => {
-  const response = await prisma.personaje.findMany({ where: { flag: true } });
+export const getListaPersonajeSrv = async (idUsuario: number) => {
+
+  const response = await prisma.personaje.findMany(
+    {
+      where:
+      {
+        idUsuario,
+        flag: true
+      }
+    });
   return response;
 };
 
@@ -39,7 +47,7 @@ export const getPersonajeSrv = async (id: number) => {
   return response;
 };
 
-export const deletePersonajeSrv = async (id: number) => {
+export const deletePersonajeSrv = async (id: number, idUsuario: number) => {
 
   //Hard delete
   // const response = await prisma.personaje.delete({
@@ -51,7 +59,8 @@ export const deletePersonajeSrv = async (id: number) => {
   //soft delete
   const response = await prisma.personaje.update({
     where: {
-      id
+      id,
+      idUsuario
     },
     data: {
       flag: false
@@ -63,14 +72,16 @@ export const deletePersonajeSrv = async (id: number) => {
 export const updatePersonajeSrv = async ({
   id,
   nombre,
-  foto
+  foto,
+  idUsuario
 }: Personaje) => {
   if (!nombre) {
     return { error: "Es requerido" }
   }
   const response = await prisma.personaje.update({
     where: {
-      id
+      id,
+      idUsuario
     },
     data: {
       nombre, foto

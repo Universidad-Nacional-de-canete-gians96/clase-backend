@@ -8,13 +8,13 @@ import {
 } from "../controllers/personaje.ctrl";
 import { createPersonajeValidation } from "../validations/joi/personaje.valid";
 import { CreatePersonajeDto } from "../validations/dtos/personaje.dto";
-import { validateDto } from "../middlewares/validate-dto";
+import { validateBodyDto } from "../middlewares/validate-dto";
 import { RolUsuario } from "@prisma/client";
 import { rolRequired } from "../middlewares/rol.md";
 const router = Router();
 
 //podemos usar DTO's o Joi para validar los datos enviados [Ejemplo]
-router.post("/", validateDto(CreatePersonajeDto), createPersonajeValidation, createPersonajeCtrl);
+router.post("/", validateBodyDto(CreatePersonajeDto), createPersonajeValidation, createPersonajeCtrl);
 
 router.get("/list", rolRequired(RolUsuario.ADMIN), getListaPersonajeCtrl);
 

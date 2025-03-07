@@ -1,15 +1,15 @@
 import { Request, Response } from "express";
 import {
-    createPersonajeSrv,
-    getListaPersonajeSrv,
-    getPersonajeSrv,
-    deletePersonajeSrv,
-    updatePersonajeSrv
-} from "../services/personaje.srv";
+    deleteUsuario,
+    getListUsuario,
+    getUsuario,
+    registerUsuario,
+    updateUsuario
+} from "../services/usuario.srv";
 
-export const createPersonajeCtrl = async ({ body }: Request, res: Response) => {
+export const createUsuarioCtrl = async ({ body }: Request, res: Response) => {
     try {
-        const response = await createPersonajeSrv(body);
+        const response = await registerUsuario(body);
         // res.status(200).json({ msg: "200", data: response, success: true });
         res.status(200).json({ statusCode: 200, message: "Se ejecuto correctamente tu solicitud", data: response, success: true });
     } catch (error) {
@@ -18,40 +18,40 @@ export const createPersonajeCtrl = async ({ body }: Request, res: Response) => {
 };
 
 
-export const getListaPersonajeCtrl = async (req: Request, res: Response) => {
+export const getListaUsuarioCtrl = async (req: Request, res: Response) => {
     try {
         const { idUsuario } = req.body
-        const response = await getListaPersonajeSrv(Number(idUsuario));
+        const response = await getListUsuario();
         res.status(200).json({ msg: "Ejecución correcta", data: response, success: true });
     } catch (error) {
         res.status(500).json(error);
     }
 };
 
-export const getPersonajeCtrl = async (req: Request, res: Response) => {
+export const getUsuarioCtrl = async (req: Request, res: Response) => {
     try {
         const { id } = req.params
-        const response = await getPersonajeSrv(Number(id));
+        const response = await getUsuario(Number(id));
         res.status(200).json({ msg: 200, data: response, success: true });
     } catch (error) {
         res.status(500).json({ error, success: false });
     }
 };
 
-export const deletePersonajeCtrl = async (req: Request, res: Response) => {
+export const deleteUsuarioCtrl = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
         const { idUsuario } = req.body
-        const response = await deletePersonajeSrv(parseInt(id), Number(idUsuario));
+        const response = await deleteUsuario(parseInt(id));
         res.status(200).json({ msg: 200, data: response, success: true });
     } catch (error) {
         res.status(500).json({ error, success: false });
     }
 };
 
-export const updatePersonajeCtrl = async ({ body }: Request, res: Response) => {
+export const updateUsuarioCtrl = async ({ body }: Request, res: Response) => {
     try {
-        const response = await createPersonajeSrv(body);
+        const response = await updateUsuario(body);
         res.status(200).json({ msg: 200, data: response, success: true });
     } catch (error) {
         res.status(500).json({ error, success: false });

@@ -1,18 +1,15 @@
 import { PrismaClient, Usuario } from "@prisma/client";
 import { encrypt } from "../utils/bcrypt.handle";
-import { generateTokenUnlimitTime } from "../utils/jwt.handle";
 const prisma = new PrismaClient();
-export const registerUser = async ({
+export const registerUsuario = async ({
     email,
     password,
     nombres
 }: Usuario) => {
-
     const checkIs = await prisma.usuario.findFirst({
         where: { email },
     });
-    if (checkIs?.email) return "ALREADY_USER";
-
+    if (checkIs?.email) return "ALREADY_Usuario";
     const passHash = await encrypt(password);
     const response = await prisma.usuario.create({
         data: {
@@ -24,7 +21,7 @@ export const registerUser = async ({
     return response
 };
 
-export const updateUser = async ({
+export const updateUsuario = async ({
     id,
     nombres,
     email,
@@ -34,7 +31,7 @@ export const updateUser = async ({
     const checkIs = await prisma.usuario.findFirst({
         where: { email },
     });
-    if (checkIs?.email && id === 0) return "ALREADY_USER";
+    if (checkIs?.email && id === 0) return "ALREADY_Usuario";
 
 
     const response = await prisma.usuario.update({
@@ -50,24 +47,20 @@ export const updateUser = async ({
     return response
 };
 
-
-
-
 export const getListUsuario = async () => {
-    const response = await prisma.usuario.findMany();
-    return response
+    return await prisma.usuario.findMany()
 };
 
-export const getUser = async (id: number) => {
+export const getUsuario = async (id: number) => {
 
-    const user = await prisma.usuario.findFirst({
+    const Usuario = await prisma.usuario.findFirst({
         where: {
             id
         },
     });
-    if (!user) return
+    if (!Usuario) return
 
-    return user
+    return Usuario
 };
 
 export const getSearchUsuario = async (nombres: string) => {
@@ -80,7 +73,7 @@ export const getSearchUsuario = async (nombres: string) => {
     return response;
 };
 
-export const deleteUser = async (id: number) => {
+export const deleteUsuario = async (id: number) => {
 
     const response = await prisma.usuario.delete({
         where: {
