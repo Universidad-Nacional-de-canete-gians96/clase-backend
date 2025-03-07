@@ -9,9 +9,15 @@ export const registerUsuario = async ({
     const checkIs = await prisma.usuario.findFirst({
         where: { email },
     });
-    if (checkIs?.email) return "ALREADY_Usuario";
+    if (checkIs?.email) return "ALREADY EXIST";
     const passHash = await encrypt(password);
     const response = await prisma.usuario.create({
+        select: {
+            id: true,
+            email: true,
+            nombres: true,
+            rol: true,
+        },
         data: {
             email,
             nombres,
@@ -29,10 +35,10 @@ export const updateUsuario = async ({
 }: Usuario) => {
 
     const checkIs = await prisma.usuario.findFirst({
-        where: { email },
+        where: { id },
     });
-    if (checkIs?.email && id === 0) return "ALREADY_Usuario";
-
+    if (!checkIs) return "NO_EXISTE"
+    // if (checkIs?.email && id === 0) return "ALREADY_EXIST";
 
     const response = await prisma.usuario.update({
         where: {
@@ -74,7 +80,7 @@ export const getSearchUsuario = async (nombres: string) => {
 };
 
 export const deleteUsuario = async (id: number) => {
-
+    
     const response = await prisma.usuario.delete({
         where: {
             id

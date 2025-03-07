@@ -5,13 +5,13 @@ enum JWT_TIME {
     UNLIMIT
 }
 
-export const generateTokenLimitTime = async (email: string, name: string, id: number) => {
-    const jwt = await sign({ id, email, name, limit: JWT_TIME.LIMIT }, JWT_SECRET, { expiresIn: "2h" });
+export const generateTokenLimitTime = async (email: string, nombres: string, id: number) => {
+    const jwt = await sign({ id, email, nombres, limit: JWT_TIME.LIMIT }, JWT_SECRET, { expiresIn: "2h" });
     return jwt;
 };
 
-export const generateTokenUnlimitTime = async (email: string, name: string, id: number) => {
-    const jwt = await sign({ id, email, name, limit: JWT_TIME.UNLIMIT }, JWT_SECRET);
+export const generateTokenUnlimitTime = async (email: string, nombres: string, id: number) => {
+    const jwt = await sign({ id, email, nombres, limit: JWT_TIME.UNLIMIT }, JWT_SECRET);
     return jwt;
 };
 

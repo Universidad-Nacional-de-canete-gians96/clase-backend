@@ -7,13 +7,10 @@ export const validateBodyDto = (DtoClass: any) => {
         const instance = plainToInstance(DtoClass, req.body);
         const errors = await validate(instance);
         if (errors.length > 0) {
-             res.status(400).json({
+            res.status(400).json({
                 success: false,
                 statusCode: 400,
-                errors: errors.map(err => ({
-                    property: err.property,
-                    constraints: err.constraints,
-                })),
+                errors: errors.map(err => err.constraints),
             });
             return;
         }
@@ -23,19 +20,21 @@ export const validateBodyDto = (DtoClass: any) => {
 
 export const validateParamsDto = (DtoClass: any) => {
     return async (req: Request, res: Response, next: NextFunction) => {
-        const instance = plainToInstance(DtoClass, req.params);
-        const errors = await validate(Object.values(instance));
+        // Convierte req.params a una instancia del DTO
+        const paramsInstance: any = plainToInstance(DtoClass, req.params, {
+            enableImplicitConversion: true, // Activa la conversión automática
+        });
+
+        const errors = await validate(paramsInstance);
         if (errors.length > 0) {
-             res.status(400).json({
+            res.status(400).json({
                 success: false,
                 statusCode: 400,
-                errors: errors.map(err => ({
-                    property: err.property,
-                    constraints: err.constraints,
-                })),
+                errors: errors.map(err => err.constraints),
             });
-            return;
+            return
         }
+
         next();
     };
 };

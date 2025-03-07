@@ -4,17 +4,20 @@ import { getUsuario } from "../services/usuario.srv";
 import { RolUsuario } from "@prisma/client";
 
 export const rolRequired = (role: RolUsuario) => {
-    return async ({ body }: Request, res: Response, next: NextFunction) => {
+    return async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const { user } = body;
-            const { rol } = await getUsuario(user.id);
+            const jwtBearer = req.headers.authorization || "";
+            const jwt = jwtBearer.split(" ").pop();
+            const isUser = verifyToken(`${jwt}`) as { id: number, email: string, nombres: string };
+            const { rol } = await getUsuario(isUser.id);
+
             if (rol === role) {
                 next();
             } else {
-                res.status(401).send("ROL_INVALID");
+                res.status(401).send({ statusCode: 401, msg: "NO_AUTHORIZED" });
             }
         } catch (error) {
-            res.status(401).send("SESSION_NO_VALID");
+            res.status(401).send({ statusCode: 401, msg: "SESSION_NO_VALID" });
         }
     }
 };

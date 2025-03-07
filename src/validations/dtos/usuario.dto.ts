@@ -1,4 +1,6 @@
-import { IsEmail, IsNegative, IsNumber, IsString } from "class-validator";
+import { Type } from "class-transformer";
+import { IsEmail, IsNegative, IsNumber, IsPositive, IsString } from "class-validator";
+// import { number } from "joi";
 
 export class CrearUsuarioDto {
     @IsEmail()
@@ -14,7 +16,7 @@ export class CrearUsuarioDto {
 export class ModificarUsuarioDto {
 
     @IsNumber()
-    @IsNegative()
+    @IsPositive()
     id: number;
 
     @IsEmail()
@@ -27,8 +29,9 @@ export class ModificarUsuarioDto {
     nombres: string;
 }
 
-export class EliminarUsuarioDto {
+export class GetUsuarioDto {
     @IsNumber()
-    @IsNegative()
+    @IsPositive()
+    @Type(() => Number)
     id: number;
 }

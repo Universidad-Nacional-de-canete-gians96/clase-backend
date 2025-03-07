@@ -34,15 +34,16 @@ export const getListaPersonajeSrv = async (idUsuario: number) => {
 };
 
 
-export const getPersonajeSrv = async (id: number) => {
+export const getPersonajeSrv = async (id: number, idUsuario: number) => {
   const response = await prisma.personaje.findFirst({
     where: {
       id,
-      flag: true
+      flag: true,
+      idUsuario
     }
   });
   if (!response) {
-    return 405
+    return 404
   }
   return response;
 };
@@ -57,6 +58,10 @@ export const deletePersonajeSrv = async (id: number, idUsuario: number) => {
   // });
 
   //soft delete
+
+  const isExist = await getPersonajeSrv(id, idUsuario);
+  if (isExist === 404) return "No existe personaje"
+
   const response = await prisma.personaje.update({
     where: {
       id,
@@ -75,16 +80,23 @@ export const updatePersonajeSrv = async ({
   foto,
   idUsuario
 }: Personaje) => {
-  if (!nombre) {
-    return { error: "Es requerido" }
-  }
+
+  const isExist = await prisma.personaje.findFirst({
+    where: {
+      id
+    }
+  });
+  if (!isExist) return "No existe personaje"
+
+  if (isExist.idUsuario !== idUsuario) return "No tiene permiso para editar"
   const response = await prisma.personaje.update({
     where: {
       id,
       idUsuario
     },
     data: {
-      nombre, foto
+      nombre,
+      foto
     }
   });
 
